@@ -1,7 +1,7 @@
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 from price_engine import calculate_price
-from db import get_connection
+
 
 BOT_TOKEN = "8109112179:AAFOhMJF9XOfJPtWzCYClP7N28jcipPEb5Q"
 
