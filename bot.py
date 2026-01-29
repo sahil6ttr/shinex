@@ -67,29 +67,29 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif session.get("step") == "time":
         session["time"] = text
 
-        # Save booking to DB
-        conn = get_connection()
-        cursor = conn.cursor()
+                import json
+        from datetime import datetime
 
-        sql = """
-        INSERT INTO bookings
-        (vehicle_category, service_type, price, booking_date, start_time, end_time)
-        VALUES (%s, %s, %s, %s, %s, %s)
-        """
+        booking = {
+            "vehicle": session["vehicle"],
+            "service": session["service"],
+            "price": session["price"],
+            "date": session["date"],
+            "time": session["time"],
+            "created_at": str(datetime.now())
+        }
 
-        values = (
-            session["vehicle"],
-            session["service"],
-            session["price"],
-            session["date"],
-            session["time"],
-            session["time"]
-        )
+        try:
+            with open("bookings.json", "r") as f:
+                data = json.load(f)
+        except:
+            data = []
 
-        cursor.execute(sql, values)
-        conn.commit()
-        cursor.close()
-        conn.close()
+        data.append(booking)
+
+        with open("bookings.json", "w") as f:
+            json.dump(data, f, indent=4)
+
 
         await update.message.reply_text(
             "✅ Booking Confirmed!\n"
